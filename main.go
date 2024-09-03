@@ -11,18 +11,21 @@ import (
 
 	cmthttp "github.com/cometbft/cometbft/rpc/client/http"
 	cmttypes "github.com/cometbft/cometbft/types"
-	// osmosisapp "github.com/osmosis-labs/osmosis/v26/app"
-	// osmosisparams "github.com/osmosis-labs/osmosis/v26/app/params"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	osmosisapp "github.com/osmosis-labs/osmosis/v26/app"
+	osmosisparams "github.com/osmosis-labs/osmosis/v26/app/params"
 )
 
-//var (
-//	encodingConfig osmosisparams.EncodingConfig
-//)
-//
-//func init() {
-//	// Initialize the Osmosis v26 encoding config
-//	encodingConfig = osmosisapp.MakeEncodingConfig()
-//}
+var (
+	encodingConfig osmosisparams.EncodingConfig
+)
+
+func init() {
+	// Initialize the Osmosis v26 encoding config
+	encodingConfig = osmosisapp.MakeEncodingConfig()
+}
 
 func NewChainClient(rpcEndpoint string) (*cmthttp.HTTP, error) {
 	var client *cmthttp.HTTP
@@ -131,16 +134,16 @@ func replayTxs(ctx context.Context, sourceRPC, destRPC string) error {
 
 func replayTx(ctx context.Context, destClient *cmthttp.HTTP, tx cmttypes.Tx) error {
 	// Broadcast the transaction to the destination chain
-	//	decodedTx, err := decodeTx(tx)
-	//	if err != nil {
-	//		return fmt.Errorf("failed to decode transaction: %w", err)
-	//	}
-	//
-	//	// Print the messages in the transaction
-	//	for i, msg := range decodedTx.GetMsgs() {
-	//		log.Printf("Message %d: Type: %T", i, msg)
-	//		log.Printf("Message %d Content: %+v", i, msg)
-	//	}
+	decodedTx, err := decodeTx(tx)
+	if err != nil {
+		return fmt.Errorf("failed to decode transaction: %w", err)
+	}
+
+	// Print the messages in the transaction
+	for i, msg := range decodedTx.GetMsgs() {
+		log.Printf("Message %d: Type: %T", i, msg)
+		//log.Printf("Message %d Content: %+v", i, msg)
+	}
 	result, err := destClient.BroadcastTxSync(ctx, tx)
 	if err != nil {
 		return fmt.Errorf("failed to broadcast transaction: %w", err)
@@ -200,6 +203,6 @@ func max(a, b int64) int64 {
 	return b
 }
 
-//func decodeTx(txBytes cmttypes.Tx) (sdk.Tx, error) {
-//	return encodingConfig.TxConfig.TxDecoder()(txBytes)
-//}
+func decodeTx(txBytes cmttypes.Tx) (sdk.Tx, error) {
+	return encodingConfig.TxConfig.TxDecoder()(txBytes)
+}
