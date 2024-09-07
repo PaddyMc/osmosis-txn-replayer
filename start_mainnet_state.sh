@@ -26,11 +26,11 @@ echo -e ✅ Snapshot downloaded successfully.
 osmosisd start --home=$HOME/.osmosisd
 
 # Wait for at least 1 block
-killall osmosisd
+#  killall osmosisd
 
 # Make sure you're on v25
-osmosisd in-place-testnet edgenet osmo12smx2wdlyttvyzvzg54y2vnqwq2qjateuf7thj --trigger-testnet-upgrade v26
+# /home/cryptomatictrader/github.com/osmosis-labs/osmosis.v25/build/osmosisd in-place-testnet edgenet osmo12smx2wdlyttvyzvzg54y2vnqwq2qjateuf7thj --trigger-testnet-upgrade v26
 
 # Run to run migrations
-osmosisd start --home=$HOME/.osmosisd --p2p.persistent_peers "" --p2p.seeds "" --rpc.unsafe --grpc.enable --grpc-web.enable
+# /home/cryptomatictrader/github.com/osmosis-labs/osmosis.cleanV26/build/osmosisd start --home=$HOME/.osmosisd --p2p.persistent_peers "" --p2p.seeds "" --rpc.unsafe --grpc.enable --grpc-web.enable
 
