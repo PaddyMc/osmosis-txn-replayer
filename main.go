@@ -120,12 +120,20 @@ func replayTxs(ctx context.Context, sourceRPC, destRPC string) error {
 				continue
 			}
 
-			for _, tx := range block.Block.Txs {
+			// Iterate through transactions in reverse order
+			for i := len(block.Block.Txs) - 1; i >= 0; i-- {
+				tx := block.Block.Txs[i]
 				err := replayTx(ctx, destClient, tx)
 				if err != nil {
 					log.Printf("Failed to replay transaction: %v", err)
 				}
 			}
+			//			for _, tx := range block.Block.Txs {
+			//				err := replayTx(ctx, destClient, tx)
+			//				if err != nil {
+			//					log.Printf("Failed to replay transaction: %v", err)
+			//				}
+			//			}
 
 			log.Printf("Processed block at height: %d", blockHeight)
 		}
@@ -163,7 +171,7 @@ func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// Get RPC endpoints from environment variables or use defaults
-	sourceRPC := getEnv("SOURCE_RPC", "https://rpc.osmosis.zone:443")
+	sourceRPC := getEnv("SOURCE_RPC", "https://rpc.archive.osmosis.zone:443")
 	destRPC := getEnv("DEST_RPC", "http://localhost:26657")
 
 	// Create a cancellable context
